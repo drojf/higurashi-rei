@@ -145,6 +145,11 @@ def buildPatch(dataFolderName):
     shutil.move('Assembly-CSharp.dll', f'temp/{dataFolderName}/Managed/Assembly-CSharp.dll')
     shutil.move('AVProVideo.dll', f'temp/{dataFolderName}/Plugins/AVProVideo.dll')
 
+    try:
+        shutil.move('Assembly-CSharp.version.txt', f'temp/{dataFolderName}/Managed/Assembly-CSharp.version.txt')
+    except:
+        print("Failed to copy DLL version file 'Assembly-CSharp.version.txt'")
+
     rootJSONFiles = glob.glob('*.json')
 
     # Except for certain ignored files, copy everything in the current directory to the 'temp/Higurashi_Ep0X/StreamingAssets' folder
