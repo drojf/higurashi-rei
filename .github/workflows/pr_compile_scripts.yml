@@ -30,6 +30,8 @@ jobs:
     name: Windows Build
     needs: dll_build
     runs-on: windows-latest
+    permissions:
+      contents: write
     strategy:
       matrix:
         python-version: [3.8]
@@ -45,7 +47,7 @@ jobs:
 
       # Setup python (Windows VM is Python 3.7 by default, we need at least Python 3.8)
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
