@@ -15,12 +15,12 @@ jobs:
           repository: 07th-mod/higurashi-assembly
           ref: rei-mod
 
-      - name: Save Git Hash
-        run: git show --pretty="format:%H (%s, %cs)" --no-patch > Assembly-CSharp.version.txt
-
       # Note: This uses the mono bundled with Ubuntu to build the project
       - name: Compile project
         run: msbuild /p:Configuration=Release
+
+      - name: Save Git Hash
+        run: git show --pretty="format:%H (%s, %cs)" --no-patch > ./bin/Release/Assembly-CSharp.version.txt
 
       - name: Upload DLL as Artifact
         uses: actions/upload-artifact@v3
@@ -28,7 +28,7 @@ jobs:
           name: higurashi-dll
           path: |
             ./bin/Release/Assembly-CSharp.dll
-            Assembly-CSharp.version.txt
+            ./bin/Release/Assembly-CSharp.version.txt
           if-no-files-found: error
 
   windows_build:
