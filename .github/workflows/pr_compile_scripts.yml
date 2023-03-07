@@ -20,7 +20,8 @@ jobs:
         run: msbuild /p:Configuration=Release
 
       - name: Save Git Hash
-        run: git show --pretty="format:%H (%s, %cs)" --no-patch > ./bin/Release/Assembly-CSharp.version.txt
+        run: >-
+          git show --pretty="format:Commit: %H%nDate: %cs%nMessage: %s" --no-patch > ./bin/Release/Assembly-CSharp.version.txt
 
       - name: Upload DLL as Artifact
         uses: actions/upload-artifact@v3
