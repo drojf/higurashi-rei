@@ -5,7 +5,7 @@ on:
   - pull_request
 
 jobs:
-  build_dll:
+  dll_build:
     name: Build DLL
     runs-on: ubuntu-latest
     steps:
@@ -28,6 +28,7 @@ jobs:
 
   windows_build:
     name: Windows Build
+    needs: dll_build
     runs-on: windows-latest
     strategy:
       matrix:
