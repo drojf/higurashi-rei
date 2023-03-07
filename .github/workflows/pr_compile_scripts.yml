@@ -5,6 +5,27 @@ on:
   - pull_request
 
 jobs:
+  build_dll:
+    name: Build DLL
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+        with:
+          repository: 07th-mod/higurashi-assembly
+          ref: rei-mod
+
+      # Note: This uses the mono bundled with Ubuntu to build the project
+      - name: Compile project
+        run: msbuild /p:Configuration=Release
+
+      - name: Upload DLL as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: higurashi-dll
+          path: ./bin/Release/Assembly-CSharp.dll
+          if-no-files-found: error
+
   windows_build:
     name: Windows Build
     runs-on: windows-latest
@@ -14,6 +35,12 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
+
+      # Download Windows artifacts
+      - name: Download DLL
+        uses: actions/download-artifact@v3
+        with:
+          name: higurashi-dll
 
       # Setup python (Windows VM is Python 3.7 by default, we need at least Python 3.8)
       - name: Set up Python ${{ matrix.python-version }}
@@ -26,7 +53,6 @@ jobs:
         env:
           HIGURASHI_BASE_EXTRACT_KEY: ${{ secrets.HIGURASHI_BASE_EXTRACT_KEY }}
         run: |
-          curl -OJ https://raw.githubusercontent.com/07th-mod/higurashi_release/master/deploy_higurashi/deploy_higurashi.py
           python deploy_higurashi.py ${{ github.event.repository.name }}
           rm deploy_higurashi.py
 
